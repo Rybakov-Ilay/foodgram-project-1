@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_style %}
+    <link rel="stylesheet" href={% static 'pages/myFollow.css' %}>
+{% endblock page_style %}
+{% block tag %}
+{% endblock tag %}
+{% block content %}
+
+<main class="main container">
+    <div class="main__header">
+        <h1 class="main__title">Мои подписки</h1>
+    </div>
+    <div class="card-list">
+        {% csrf_token %}
+        {% for author in page %}
+        <div class="card-user" data-author={{ author.id }}>
+        <div class="card-user__header">
+            <h2 class="card-user__title"> {{ author.username }} </h2>
+        </div>
+        <div class="card-user__body">
+            <ul class="card-user__items">
+                {% for recipe in author.recipes.all %}
+                    {% if forloop.counter < 4 %}
+                <li class="card-user__item">
+                    <div class="recipe">
+                        {% load thumbnail %}
+                        {% thumbnail recipe.image "75x75" crop="center" as im %}
+                        <img src="{{ im.url }}" alt="какой-то-текст" class="recipe__image">
+                        {% endthumbnail %}
+                        <h3 class="recipe__title">{{ recipe.title }}</h3>
+                        <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
+                    </div>
+                </li>
+                    {% endif %}
+                {% endfor %}
+
+                <li class="card-user__item">
+                    {% if author.recipes.all.count > 3 %}
+                    <a href={% url 'profile' author.username %} class="card-user__link">Еще рецепты автора ({{ author.recipes.all.count|add:-3 }})</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+        <div class="card-user__footer">
+            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
+        </div>
+
+    </div>
+
+    {% endfor %}
+</main>
+
+
+{% endblock content %}
+{% block js %}
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/MainCards.js' %}"></script>
+<script src="{% static 'js/components/MyFollow.js' %}"></script>
+<script src="{% static 'js/components/Subscribe.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
+<script src="{% static 'myFollow.js' %}"></script>
+{% endblock js %}
+</body>

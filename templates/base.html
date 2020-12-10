@@ -6,23 +6,19 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}Foodgram{% endblock %}</title>
-    {% block page_style %}
-    {% endblock page_style %}
-
 </head>
 
+{% block page_style %}
+{% endblock page_style %}
 
-        {% include 'includes/nav.html' %}
+{% include 'includes/nav.html' %}
 
-        {% block content %}
+{% block content %}
+{% endblock content %}
 
-        <!-- Содержимое страницы -->
-        {% endblock content %}
+{% include 'includes/footer.html' %}
 
-        {% include 'includes/footer.html' %}
-
-        {% block js %}
-        <!-- Загрузка JavaScript -->
-        {% endblock js %}
+{% block js %}
+{% endblock js %}
 
 </html>

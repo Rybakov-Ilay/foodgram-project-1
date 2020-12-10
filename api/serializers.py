@@ -1,8 +1,7 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueTogetherValidator
 
-from main.models import Ingredient, Recipe, User
+from recipes.models import Ingredient, Recipe, User
 
 from .models import Favorite, Purchase, Subscribe
 

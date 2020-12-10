@@ -8,8 +8,6 @@
             <li class="pagination__item"><a class="pagination__link link" href="#" tabindex="-1"
                                             aria-disabled="true"><span class="icon-left"></span></a></li>
         {% endif %}
-
-
         {% for i in paginator.page_range %}
             {% if items.number == i %}
                 <li class="pagination__item pagination__item_active"><a class="pagination__link link" href="?page=
@@ -19,8 +17,6 @@
                         {{ i }}{% for tag in tags_for_page %}&filters={{ tag }}{% endfor %}">{{ i }}</a></li>
             {% endif %}
         {% endfor %}
-
-
         {% if items.has_next %}
             <li class="pagination__item"><a class="pagination__link link" href="?page=
                     {{ items.next_page_number }}{% for tag in tags_for_page %}&filters={{ tag }}{% endfor %}"><span
@@ -29,7 +25,5 @@
             <li class="pagination__item"><a class="pagination__link link" href="#" tabindex="-1"
                                             aria-disabled="true"><span class="icon-right"></span></a></li>
         {% endif %}
-
-
     </ul>
 </nav>

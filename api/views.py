@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from main.models import Ingredient, Recipe, User
+from recipes.models import Ingredient, Recipe, User
 
 from .models import Favorite, Purchase, Subscribe
 from .serializers import (FavoriteSerializer, IngredientSerializer,

@@ -6,5 +6,5 @@ def purchases_processor(request):
         purchases_count = Purchase.objects.filter(
             user=request.user).count()
     else:
-        purchases_count = len(request.session.get('shopping_list', []))
+        purchases_count = 0
     return {'purchases_count': purchases_count}

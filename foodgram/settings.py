@@ -13,7 +13,8 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'foodgram',
     'users',
-    'main',
+    'recipes',
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -23,7 +24,6 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.sites',
     'sorl.thumbnail',
-    'api',
     'rest_framework',
 ]
 
@@ -52,14 +52,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'main.context_processors.purchases_processor',
+                'recipes.context_processors.purchases_processor',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
-
 
 DATABASES = {
     'default': {
@@ -103,11 +102,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
 
 MEDIA_URL = '/media/'
 
@@ -119,7 +116,15 @@ LOGIN_REDIRECT_URL = 'index'
 
 LOGOUT_REDIRECT_URL = 'index'
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = ''  # будет указано в env
+
+EMAIL_HOST_PASSWORD = ''  # будет указано в env
+
+EMAIL_PORT = 587
 
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 

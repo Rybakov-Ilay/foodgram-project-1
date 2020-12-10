@@ -137,4 +137,20 @@ class Api {
                 return Promise.reject(e.statusText)
             })
     }
+
+    removeIngredientValue(id) {
+    return fetch(`/ingredient_value/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+        }
+    })
+        .then(e => {
+            if (e.ok) {
+                return e.json()
+            }
+            return Promise.reject(e.statusText)
+        })
+    }
 }

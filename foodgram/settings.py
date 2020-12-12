@@ -2,11 +2,16 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = '@78pkdx_e4riczi!&p%+qtl0ofz8)a(44wix661mu*wxulhgm&'
+SECRET_KEY = os.environ['SECRET_KEY']
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    '84.201.181.121',
+    'localhost',
+    'learning-project.ml',
+    'www.learning-project.ml',
+]
 
 INSTALLED_APPS = [
     'foodgram',
@@ -60,8 +65,12 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.environ['DB_ENGINE'],
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': os.environ['DB_HOST'],
+        'PORT': os.environ['DB_PORT'],
     }
 }
 
@@ -106,6 +115,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'frontend')
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -120,9 +131,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
 
-EMAIL_HOST_USER = ''  # будет указано в env
+EMAIL_HOST_USER = os.environ['EMAIL_HOW_USER']
 
-EMAIL_HOST_PASSWORD = ''  # будет указано в env
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 
 EMAIL_PORT = 587
 

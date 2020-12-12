@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="card__footer">
-        {% if not recipe|purchase:request.user %}
+        {% if not recipe|purchase:request.user or user.is_anonymous %}
             <button class="button button_style_light-blue" name="purchases" data-out><span
                     class="icon-plus button__icon"></span>Добавить в покупки
             </button>
@@ -31,7 +31,7 @@
                     class="icon-check button__icon"></span> Рецепт добавлен
             </button>
         {% endif %}
-        {% if not recipe|favorite:request.user %}
+        {% if not recipe|favorite:request.user or user.is_anonymous %}
             <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span>
             </button>
         {% else %}

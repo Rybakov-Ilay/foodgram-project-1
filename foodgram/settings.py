@@ -1,7 +1,5 @@
 import os
 
-from django.conf.global_settings import AUTHENTICATION_BACKENDS
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '@78pkdx_e4riczi!&p%+qtl0ofz8)a(44wix661mu*wxulhgm&'
@@ -91,6 +89,8 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+OBJECTS_PER_PAGE = 6
 
 LANGUAGE_CODE = 'ru'
 

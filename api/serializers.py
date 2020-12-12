@@ -29,8 +29,12 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
-    id = serializers.SlugRelatedField(slug_field='id', queryset=Recipe.objects.all(), source='recipe')
-    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    id = serializers.SlugRelatedField(slug_field='id',
+                                      queryset=Recipe.objects.all(),
+                                      source='recipe')
+    serializer_user = serializers.CurrentUserDefault()
+    user = serializers.PrimaryKeyRelatedField(read_only=True,
+                                              default=serializer_user)
 
     class Meta:
         fields = ['id', 'user']
@@ -49,8 +53,12 @@ class PurchaseSerializer(serializers.ModelSerializer):
 
 
 class SubscribeSerializer(serializers.ModelSerializer):
-    id = serializers.SlugRelatedField(slug_field='id', queryset=User.objects.all(), source='author')
-    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    id = serializers.SlugRelatedField(slug_field='id',
+                                      queryset=User.objects.all(),
+                                      source='author')
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+        default=serializers.CurrentUserDefault())
 
     class Meta:
         fields = ['id', 'user']

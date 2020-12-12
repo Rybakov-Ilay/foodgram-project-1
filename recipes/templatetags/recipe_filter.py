@@ -20,3 +20,10 @@ def get_filter_link(request, tag):
         new_request.appendlist('filters', tag.slug)
 
     return new_request.urlencode()
+
+
+@register.simple_tag
+def url_replace(request, field, value):
+    params = request.GET.copy()
+    params[field] = value
+    return params.urlencode()

@@ -19,7 +19,7 @@
         <div class="author-subscribe" data-author={{ author.id }}>
             <p style="padding: 0 0 2em 0;">
                 {% if request.user != author %}
-                    {% if not author|subscribe:request.user %}
+                    {% if not author|subscribe:request.user or user.is_anonymous %}
                         <button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>
                             Подписаться на автора
                         </button>

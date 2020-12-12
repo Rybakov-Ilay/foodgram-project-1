@@ -1,11 +1,15 @@
+import csv
+
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.http import HttpResponse
-from .models import Recipe, User, Ingredient, IngredientValue, Tag
-from api.models import Purchase, Favorite
+from django.shortcuts import get_object_or_404, redirect, render
+
+from api.models import Favorite, Purchase
+from foodgram.settings import OBJECTS_PER_PAGE
+
 from .forms import RecipeForm
-import csv
+from .models import Ingredient, IngredientValue, Recipe, Tag, User
 
 
 def index(request):
@@ -17,10 +21,12 @@ def index(request):
         recipes = Recipe.objects.all()
 
     tags = Tag.objects.all()
-    paginator = Paginator(recipes, 6)
+    paginator = Paginator(recipes, OBJECTS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'index.html', {'page': page, 'paginator': paginator, 'tags': tags})
+    return render(request, 'index.html',
+                  {'page': page, 'paginator': paginator, 'tags': tags,
+                   'index': True})
 
 
 def create_ingredient(form, recipe):
@@ -31,35 +37,39 @@ def create_ingredient(form, recipe):
         elif 'valueIngredient' in key:
             amount = value
             ingredient = Ingredient.objects.get(title=title)
-            obj.append(IngredientValue(ingredient=ingredient, recipe=recipe, value=amount))
+            obj.append(IngredientValue(ingredient=ingredient, recipe=recipe,
+                                       value=amount))
     IngredientValue.objects.bulk_create(obj)
 
 
 @login_required
 def new_recipe(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
-    if request.method == 'POST' and form.is_valid():
+    if form.is_valid():
         recipe = form.save(commit=False)
         recipe.author = request.user
         recipe.save()
         create_ingredient(form, recipe)
         form.save_m2m()
         return redirect('index')
-    return render(request, 'new_recipe.html', {'form': form})
+    return render(request, 'new_recipe.html',
+                  {'form': form, 'new_recipe': True})
 
 
 @login_required
 def recipe_edit(request, username, recipe_id):
     author = get_object_or_404(User, username=username)
     recipe = get_object_or_404(Recipe, pk=recipe_id)
-    redirect_url = redirect('recipe-view', username=recipe.author, recipe_id=recipe.id)
+    redirect_url = redirect('recipe-view', username=recipe.author,
+                            recipe_id=recipe.id)
     ingredient = IngredientValue.objects.filter(recipe=recipe)
-    form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
+    form = RecipeForm(request.POST or None, files=request.FILES or None,
+                      instance=recipe)
     if request.user != recipe.author:
         return redirect_url
-    if request.method == 'POST' and form.is_valid():
+    if form.is_valid():
         recipe.ingredients.clear()
-        recipe.recipe_values.all().delete()
+        recipe.values.all().delete()
         create_ingredient(form, recipe)
         form.save()
         return redirect_url
@@ -81,9 +91,10 @@ def recipe_view(request, username, recipe_id):
     author = get_object_or_404(User, username=username)
     recipe = get_object_or_404(author.recipes, id=recipe_id)
     tags = recipe.tags.all()
-    ingredients = recipe.recipe_values.all()
+    ingredients = recipe.values.all()
     return render(request, 'single_recipe_page.html',
-                  {'author': author, 'recipe': recipe, 'ingredients': ingredients, 'tags': tags})
+                  {'author': author, 'recipe': recipe,
+                   'ingredients': ingredients, 'tags': tags})
 
 
 def profile(request, username):
@@ -94,7 +105,7 @@ def profile(request, username):
     else:
         recipes = author.recipes.all()
     tags = Tag.objects.all()
-    paginator = Paginator(recipes, 6)
+    paginator = Paginator(recipes, OBJECTS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'profile_page.html',
@@ -104,33 +115,40 @@ def profile(request, username):
 
 @login_required
 def subscriptions(request):
-    author = User.objects.prefetch_related('recipes').filter(following__user=request.user)
-    paginator = Paginator(author, 6)
+    author = User.objects.prefetch_related('recipes').filter(
+        following__user=request.user)
+    paginator = Paginator(author, OBJECTS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'follow.html', {'page': page, 'paginator': paginator, 'author': author})
+    return render(request, 'follow.html',
+                  {'page': page, 'paginator': paginator, 'author': author,
+                   'subscriptions': True})
 
 
 @login_required
-def favourites(request):
+def favorites(request):
     if 'filters' in request.GET:
         filters = request.GET.getlist('filters')
-        favourite = Favorite.objects.select_related('user').filter(recipe__tags__slug__in=filters)
+        favourite = Favorite.objects.select_related('user').filter(
+            recipe__tags__slug__in=filters)
 
     else:
         favourite = Favorite.objects.select_related('user').all()
     tags = Tag.objects.all()
-    paginator = Paginator(favourite, 6)
+    paginator = Paginator(favourite, OBJECTS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'favorite.html',
-                  {'page': page, 'recipes': favourite, 'paginator': paginator, 'tags': tags})
+                  {'page': page, 'recipes': favourite, 'paginator': paginator,
+                   'tags': tags, favorites: True})
 
 
 @login_required
-def purchases_list(request):
-    purchases = request.user.purchases.all()
-    return render(request, 'purchase.html', {'purchases': purchases})
+def get_purchases(request):
+    user = request.user
+    purchases = user.purchases.all()
+    return render(request, 'purchase.html',
+                  {'purchases': purchases, 'purchases_page': True})
 
 
 @login_required
@@ -141,38 +159,31 @@ def purchase_delete(request, purchase_id):
 
 
 @login_required
-def download_shopping_list(request):
-    recipes = Recipe.objects.filter(recipe_purchase__user=request.user)
+def download_purchases(request):
+    recipes = Recipe.objects.filter(purchases__user=request.user)
 
-    ingredients_list: dict = {}
+    ingredients_for_purchase: dict = {}
 
     for recipe in recipes:
         ingredients = recipe.ingredients.values_list('title', 'dimension')
-        value = recipe.recipe_values.values_list('value', flat=True)
+        value = recipe.values.values_list('value', flat=True)
 
-        for pos in range(len(ingredients)):
-            title: str = ingredients[pos][0]
-            dimension: str = ingredients[pos][1]
-            amount: int = value[pos]
+        for item in range(len(ingredients)):
+            title: str = ingredients[item][0]
+            dimension: str = ingredients[item][1]
+            amount: int = value[item]
 
-            if title in ingredients_list.keys():
-                ingredients_list[title] = [ingredients_list[title][0] + amount, dimension]
+            if title in ingredients_for_purchase:
+                ingredients_for_purchase[title] = [
+                    ingredients_for_purchase[title][0] + amount, dimension]
             else:
-                ingredients_list[title] = [amount, dimension]
+                ingredients_for_purchase[title] = [amount, dimension]
 
     response = HttpResponse(content_type='txt/csv')
     response['Content-Disposition'] = 'attachment; filename="shop_list.txt"'
     document = csv.writer(response)
 
-    for key, value in ingredients_list.items():
+    for key, value in ingredients_for_purchase.items():
         document.writerow([f'{key} ({value[1]}) - {value[0]}'])
 
     return response
-
-
-def page_not_found(request, exception):
-    return render(request, 'includes/404.html', {'path': request.path}, status=404)
-
-
-def server_error(request):
-    return render(request, 'includes/500.html', status=500)

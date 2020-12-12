@@ -38,8 +38,9 @@ class FavoriteDelete(APIView):
 
     def delete(self, request, id):
         recipe = get_object_or_404(Recipe, id=id)
-        favorite = recipe.recipe_favorite.filter(user=request.user)
-        if favorite.delete():
+        favorite = recipe.favorites.filter(user=request.user)
+        number_deleted, _ = favorite.delete()
+        if number_deleted == 1:
             return Response({'success': True})
         return Response({'success': False})
 
@@ -54,8 +55,9 @@ class PurchaseDelete(APIView):
 
     def delete(self, request, id):
         recipe = get_object_or_404(Recipe, id=id)
-        purchase = recipe.recipe_purchase.filter(user=request.user)
-        if purchase.delete():
+        purchase = recipe.purchases.filter(user=request.user)
+        number_deleted, _ = purchase.delete()
+        if number_deleted == 1:
             return Response({'success': True})
         return Response({'success': False})
 
@@ -72,6 +74,7 @@ class SubscribeDelete(APIView):
     def delete(self, request, id):
         author = get_object_or_404(User, id=id)
         subscribe = author.following.filter(user=request.user)
-        if subscribe.delete():
+        number_deleted, _ = subscribe.delete()
+        if number_deleted == 1:
             return Response({'success': True})
         return Response({'success': False})

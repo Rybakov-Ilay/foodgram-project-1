@@ -17,8 +17,8 @@ services:
     image: raikirixd/foodgram-project:latest
     restart: always
     volumes:
-      - static_volume:/code/static
-      - media_volume:/code/media/media/
+      - static_volume:/code/static/
+      - media_volume:/code/media/
     depends_on:
       - db
     env_file:
@@ -26,8 +26,8 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - static_volume:/code/static
-      - media_volume:/code/media/media/
+      - static_volume:/code/static/
+      - media_volume:/code/media/
     ports:
       - 80:80
     depends_on:

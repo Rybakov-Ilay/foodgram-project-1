@@ -2,7 +2,7 @@ name: foodgram_workflow
 
 on:
   push:
-    brunches: [ master ]
+    branches: [ master ]
 
 jobs:
   tests:

@@ -9,12 +9,12 @@ class Tag(models.Model):
     color = models.CharField(max_length=20, verbose_name='Цвет')
     slug = models.SlugField(unique=True, verbose_name='Адрес')
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+
+    def __str__(self):
+        return self.title
 
 
 class Ingredient(models.Model):
@@ -56,12 +56,12 @@ class Ingredient(models.Model):
     dimension = models.CharField(choices=INGREDIENT_CHOICES, max_length=10,
                                  verbose_name='Единица измерения')
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+
+    def __str__(self):
+        return self.title
 
 
 class Recipe(models.Model):
@@ -84,13 +84,13 @@ class Recipe(models.Model):
         'Дата добавления', auto_now_add=True, db_index=True
     )
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
         ordering = ('-pub_date',)
+
+    def __str__(self):
+        return self.title
 
 
 class IngredientValue(models.Model):
@@ -101,9 +101,9 @@ class IngredientValue(models.Model):
                                on_delete=models.CASCADE, verbose_name='Рецерт')
     value = models.PositiveSmallIntegerField(verbose_name='Количество')
 
-    def __str__(self):
-        return str(self.value)
-
     class Meta:
         verbose_name = 'Количество ингридиента'
         verbose_name_plural = 'Количество игридиентов'
+
+    def __str__(self):
+        return str(self.value)

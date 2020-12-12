@@ -36,7 +36,7 @@ def create_ingredient(form, recipe):
             title = value
         elif 'valueIngredient' in key:
             amount = value
-            ingredient = Ingredient.objects.get(title=title)
+            ingredient = get_object_or_404(Ingredient, title=title)
             obj.append(IngredientValue(ingredient=ingredient, recipe=recipe,
                                        value=amount))
     IngredientValue.objects.bulk_create(obj)

@@ -21,7 +21,7 @@ jobs:
           pip install flake8
           pip install -r requirements.txt
       - name: Lint with flake8
-        run: flake8 . --ignore=E1,E23,W503,E501,W291,W391,W605 --exclude=./recipes/migrations ./api/migrations
+        run: flake8 . --ignore=E1,E23,W503,E501,W291,W391,W605 --exclude=./recipes/migrations, ./api/migrations
 
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub

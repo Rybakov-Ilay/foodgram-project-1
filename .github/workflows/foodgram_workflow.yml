@@ -68,7 +68,7 @@ jobs:
             cd ~/foodgram-project
             rm .env
             touch .env
-            echo ${{ secrets.DB_ENGINE }} >> .env && echo ${{ secrets.DB_NAME }} >> .env && echo ${{ secrets.POSTGRES_USER }} >> .env && echo ${{ secrets.POSTGRES_PASSWORD }} >> .env && echo ${{ secrets.DB_HOST }} >> .env && echo ${{ secrets.DB_PORT }} >> .env && echo ${{ secrets.SECRE_KEY }} >> .env && echo ${{ secrets.EMAIL_HOST_USER }} >> .env && echo ${{ secrets.EMAIL_HOST.PASSWORD }} >> .env 
+            echo ${{ secrets.DB_ENGINE }} >> .env && echo ${{ secrets.DB_NAME }} >> .env && echo ${{ secrets.POSTGRES_USER }} >> .env && echo ${{ secrets.POSTGRES_PASSWORD }} >> .env && echo ${{ secrets.DB_HOST }} >> .env && echo ${{ secrets.DB_PORT }} >> .env && echo ${{ secrets.SECRET_KEY }} >> .env && echo ${{ secrets.EMAIL_HOST_USER }} >> .env && echo ${{ secrets.EMAIL_HOST_PASSWORD }} >> .env
             sudo docker pull raikirixd/foodgram-project:v1.0
             sudo docker-compose stop
             sudo docker-compose rm web -f

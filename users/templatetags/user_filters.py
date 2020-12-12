@@ -14,6 +14,7 @@ def favorite(recipe, user):
     """Проверяет, находится ли рецепт в избранном."""
     return Favorite.objects.filter(user=user, recipe=recipe).exists()
 
+
 @register.filter
 def subscribe(author, user):
     """Проверяет, находится ли рецепт в списке покупок."""
@@ -24,5 +25,3 @@ def subscribe(author, user):
 def purchase(recipe, user):
     """Проверяет, находится ли рецепт в списке покупок."""
     return Purchase.objects.filter(user=user, recipe=recipe).exists()
-
-

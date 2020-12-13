@@ -129,17 +129,18 @@ def subscriptions(request):
 def favorites(request):
     if 'filters' in request.GET:
         filters = request.GET.getlist('filters')
-        favourite = Favorite.objects.select_related('user').filter(
+        favorite = request.user.favorites.all().filter(
             recipe__tags__slug__in=filters)
 
     else:
-        favourite = Favorite.objects.select_related('user').all()
+        favorite = request.user.favorites.all()
+
     tags = Tag.objects.all()
-    paginator = Paginator(favourite, OBJECTS_PER_PAGE)
+    paginator = Paginator(favorite, OBJECTS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'favorite.html',
-                  {'page': page, 'recipes': favourite, 'paginator': paginator,
+                  {'page': page, 'recipes': favorite, 'paginator': paginator,
                    'tags': tags, favorites: True})
 
 

@@ -1,4 +1,4 @@
-![foodgram_workflow](https://github.com/dementevm/foodgram/workflows/foodgram_workflow/badge.svg)
+![foodgram_workflow](https://github.com/dementevm/foodgram-project/workflows/foodgram_workflow/badge.svg)
 ## Foodgram
 Диплоный проект. Сервис для публикации кулинарных рецептов. Проект доступен по адресу [http://learning-project.ml/](http://learning-project.ml/)
 ## Prerequisites

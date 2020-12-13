@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from api.models import Favorite, Purchase
+from api.models import Purchase
 from foodgram.settings import OBJECTS_PER_PAGE
 
 from .forms import RecipeForm

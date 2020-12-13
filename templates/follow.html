@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load user_filters %}
 {% block page_style %}
     <link rel="stylesheet" href={% static 'pages/myFollow.css' %}>
 {% endblock page_style %}
@@ -45,9 +46,13 @@
                         </ul>
                     </div>
                     <div class="card-user__footer">
-                        <a href="{% url 'subscriptions' %}">
-                        <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться
-                        </button></a>
+                        {% if author|subscribe:request.user %}
+                        <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора
+                        </button>
+                        {% else %}
+                        <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора
+                        </button>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

@@ -1,6 +1,6 @@
 ![foodgram_workflow](https://github.com/dementevm/foodgram-project/workflows/foodgram_workflow/badge.svg)
 ## Foodgram
-Диплоный проект. Сервис для публикации кулинарных рецептов. Проект доступен по адресу [http://learning-project.ml/](http://learning-project.ml/)
+Диплоный проект. Сервис для публикации кулинарных рецептов.
 ## Prerequisites
 Download and Install [Docker](https://www.docker.com/).
 ```
